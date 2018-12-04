@@ -28,7 +28,7 @@ public class Endpoint {
 	}
 	
 	@PostMapping("${create_endpoint}")
-	public Name createName(@PathVariable int length ,@RequestBody String word) throws Exception {
+	public Name createName(@PathVariable int length ,@RequestBody(required=false) String word) throws Exception {
 		return service.createName(length,word);
 	}
 	

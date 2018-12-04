@@ -26,7 +26,11 @@ public class ConsumeNameGenerator implements IConsumeNameGenerator {
 		String nameGenerated=restTemplate.postForObject(Constants.HOST+Constants.PORT+Constants.NAME_GEN_LOCATION+lengthToGenerate,"",String.class);
 		POJOName nameToSend = new POJOName();
 		nameToSend.setId(name.getId());
+		if(word==null ) {
+			nameToSend.setName(nameGenerated);
+		} else {
 		nameToSend.setName(word+nameGenerated);
+		}
 		jmsTemplate.convertAndSend("nameQueue",nameToSend);
 		return nameGenerated;
 	}
