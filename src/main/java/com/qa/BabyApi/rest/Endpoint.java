@@ -28,8 +28,8 @@ public class Endpoint {
 	}
 	
 	@PostMapping("${create_endpoint}")
-	public Name createName(@RequestBody Name name) {
-		return service.createName(name);
+	public Name createName(@PathVariable int length ,@RequestBody String word) throws Exception {
+		return service.createName(length,word);
 	}
 	
 	@DeleteMapping("${delete_endpoint}")

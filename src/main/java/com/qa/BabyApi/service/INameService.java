@@ -8,7 +8,7 @@ public interface INameService {
 	
 	String deleteName(Long id);
 	
-	Name createName(Name name);
+	Name createName(int length, String word) throws Exception;
 	
 	String updateName(Long id, Name name);
 
