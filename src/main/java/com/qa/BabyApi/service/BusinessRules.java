@@ -10,15 +10,15 @@ public class BusinessRules {
 		}		
 	}
 	
-	public static Boolean isWordLengthAllowed(int length, String word) {
+	public static Boolean isWordLengthAllowed(int lengthToGenerate, String word) {
 		if(word==null) {
-			if(length>12) {
+			if(lengthToGenerate>12) {
 				return false;
 			} else {
 				return true;
 			}	
 		} else {
-		if(word.length()+length>12) {
+		if(word.length()+lengthToGenerate>12) {
 			return false;
 		} else {
 			return true;
