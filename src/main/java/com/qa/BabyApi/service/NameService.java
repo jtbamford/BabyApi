@@ -22,17 +22,23 @@ public class NameService implements INameService {
 		return repo.findAll();
 	}
 	
-	public String deleteAccount(Long id) {
+	public String deleteName(Long id) {
 		repo.deleteById(id);
 		return Constants.DELETE_STRING;
 	}
 
-	public Name createName(Name name) {
-		name.setName(namegen.consumeNameGenerator(name)); //implement other API
+	public Name createName(int length, String word) throws Exception {
+		Name name = new Name();
+		int lengthToGenerate=length-word.length();
+		if(lengthToGenerate<0) {
+			throw new Exception();
+		} else {
+		name.setName(word+namegen.consumeNameGenerator(lengthToGenerate,word,name)); //implement other API
 		return repo.save(name);
+		}
 	}
 	
-	public String updateAccount(Long id, Name name) {
+	public String updateName(Long id, Name name) {
 		if (repo.findById(id) != null) {
 			Name oldName = repo.findById(id).get();
 			oldName.setName(name.getName());
