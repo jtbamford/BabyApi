@@ -1,6 +1,7 @@
 package com.qa.BabyApi.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
 import com.qa.BabyApi.InputException.InputException;
@@ -17,6 +18,9 @@ public class NameService implements INameService {
 
 	@Autowired
 	private IConsumeNameGenerator namegen;
+	
+	@Autowired
+	private JmsTemplate jmsTemplate;
 
 	public Iterable<Name> getAllNames() {
 		return repo.findAll();
@@ -39,17 +43,23 @@ public class NameService implements INameService {
 		if(word==null && BusinessRules.isWordLengthAllowed(length, word)
 				&& lengthToGenerate >0) {
 			     name.setName(namegen.consumeNameGenerator(lengthToGenerate,word , name)); // implement other API
-			     return repo.save(name);
+			     repo.save(name);
+			     jmsTemplate.convertAndSend("nameQueue",name);
+			     return name;
 		}	
 	
 		else if (BusinessRules.isWordAllowed(word) && BusinessRules.isWordLengthAllowed(length, word)
 				&& lengthToGenerate >= 0) {
 			if(lengthToGenerate>0) {
 			name.setName(word + namegen.consumeNameGenerator(lengthToGenerate, word, name)); // implement other API
-			return repo.save(name);
+			repo.save(name);
+			jmsTemplate.convertAndSend("nameQueue",name);
+			return name;
 			} else {
 				name.setName(word);
-				return repo.save(name);
+			repo.save(name);
+			jmsTemplate.convertAndSend("nameQueue",name);
+			return name;
 			}
 		} else {
 			throw new InputException();
