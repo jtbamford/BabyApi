@@ -1,5 +1,7 @@
 package com.qa.BabyApi.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
@@ -28,7 +30,12 @@ public class NameService implements INameService {
 	}
 
 	public String deleteName(Long id) {
+		POJOName nameToDelete = new POJOName();
+		Name name=repo.findById(id).get();
+		nameToDelete.setId(id);
+		nameToDelete.setName(name.getName());
 		repo.deleteById(id);
+		jmsTemplate.convertAndSend("deleteQueue", nameToDelete);
 		return Constants.DELETE_STRING;
 	}
 
@@ -78,8 +85,12 @@ public class NameService implements INameService {
 	public String updateName(Long id, Name name) {
 		if (repo.findById(id) != null) {
 			Name oldName = repo.findById(id).get();
-			oldName.setName(name.getName());
-			repo.save(oldName);
+			oldName.setName(name.getName());		
+			POJOName nameToUpdate = new POJOName();
+			nameToUpdate.setId(id);
+			nameToUpdate.setName(name.getName());
+			repo.save(oldName);			
+			jmsTemplate.convertAndSend("updateQueue", nameToUpdate);
 			return Constants.NAME_UPDATED;
 		}
 		return Constants.NAME_NOT_FOUND;
