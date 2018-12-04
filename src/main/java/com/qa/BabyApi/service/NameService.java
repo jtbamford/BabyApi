@@ -33,8 +33,12 @@ public class NameService implements INameService {
 		if(lengthToGenerate<0) {
 			throw new Exception();
 		} else {
+			if(BusinessRules.isWordAllowed(word) && BusinessRules.isWordLengthAllowed(length,word)) {
 		name.setName(word+namegen.consumeNameGenerator(lengthToGenerate,word,name)); //implement other API
 		return repo.save(name);
+			} else {
+				throw new Exception();
+			}
 		}
 	}
 	
