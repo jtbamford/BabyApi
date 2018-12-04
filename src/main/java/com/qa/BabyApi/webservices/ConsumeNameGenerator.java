@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.qa.BabyApi.constants.Constants;
 import com.qa.BabyApi.persistence.domain.Name;
 import com.qa.BabyApi.persistence.domain.POJOName;
 
@@ -22,7 +23,7 @@ public class ConsumeNameGenerator implements IConsumeNameGenerator {
 
 	@PostMapping
 	public String consumeNameGenerator(int lengthToGenerate,String word, Name name) {
-		String nameGenerated=restTemplate.postForObject("http://localhost:8084/namegen/create",lengthToGenerate,String.class);
+		String nameGenerated=restTemplate.postForObject(Constants.HOST+Constants.PORT+Constants.NAME_GEN_LOCATION+lengthToGenerate,"",String.class);
 		POJOName nameToSend = new POJOName();
 		nameToSend.setId(name.getId());
 		nameToSend.setName(word+nameGenerated);
