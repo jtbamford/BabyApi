@@ -48,7 +48,7 @@ public class NameService implements INameService {
 			lengthToGenerate = length - word.length();
 		}
 
-		if (word == null && BusinessRules.isWordLengthAllowed(length, word) && lengthToGenerate > 0) {
+		if (word == null && BusinessRules.isWordLengthAllowed(lengthToGenerate, word) && lengthToGenerate > 0) {
 			name.setName(namegen.consumeNameGenerator(lengthToGenerate, word, name)); // implement other API
 			repo.save(name);
 			POJOName nameToAdd = new POJOName();
@@ -58,7 +58,7 @@ public class NameService implements INameService {
 			return name;
 		}
 
-		else if (BusinessRules.isWordAllowed(word) && BusinessRules.isWordLengthAllowed(length, word)
+		else if (BusinessRules.isWordAllowed(word) && BusinessRules.isWordLengthAllowed(lengthToGenerate, word)
 				&& lengthToGenerate >= 0) {
 			if (lengthToGenerate > 0) {
 				name.setName(word + namegen.consumeNameGenerator(lengthToGenerate, word, name)); // implement other API
